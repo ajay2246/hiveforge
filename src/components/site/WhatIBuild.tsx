@@ -27,7 +27,7 @@ function Pill({ text }: { text: string }) {
 
 export default function WhatIBuild() {
   return (
-    <section id="services" className="mx-auto max-w-6xl px-4 hf-section">
+    <section id="services" className="mx-auto max-w-6xl px-4 py-8 md:hf-section">
       <p className="hf-kicker">What I build</p>
       <h2 className="hf-title">Frontend + Backend engineering that ships</h2>
       <p className="hf-subtitle">

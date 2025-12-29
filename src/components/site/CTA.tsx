@@ -4,7 +4,7 @@ import BookingDialog from "@/components/site/BookingDialog";
 
 export default function CTA() {
   return (
-    <section id="contact" className="mx-auto max-w-6xl px-4 hf-section">
+    <section id="contact" className="mx-auto max-w-6xl px-4 py-8 md:hf-section">
       <div className="hf-gborder">
         <Card className="hf-card hf-hover">
           <CardContent className="p-8 md:p-10">

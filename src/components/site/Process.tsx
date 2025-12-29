@@ -7,7 +7,7 @@ const steps = [
   
   export default function Process() {
     return (
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 py-8 md:py-16">
         <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">How I work</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-4">
           {steps.map((s) => (

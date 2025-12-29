@@ -4,10 +4,10 @@ import BookingDialog from "@/components/site/BookingDialog";
 
 export default function Hero() {
   return (
-    <section id="top" className="mx-auto max-w-6xl px-4 pt-16 md:pt-24">
+    <section id="top" className="mx-auto max-w-6xl px-4 pt-12 pb-8 md:pt-24 md:pb-12">
       <div className="hf-gborder">
         <Card className="hf-card hf-hover">
-          <CardContent className="p-8 md:p-12">
+          <CardContent className="p-6 md:p-12">
             <div className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1 text-sm text-zinc-700">
               <span className="h-2 w-2 rounded-full bg-amber-500" />
               Enterprise-grade engineering • Web • Platforms • AI features
@@ -48,13 +48,13 @@ export default function Hero() {
             </div>
 
             {/* Social Links */}
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3 md:mt-8 md:gap-4">
               <span className="text-sm text-zinc-600">Connect:</span>
               <a
                 href="https://www.linkedin.com/in/ajay-kancheti-57a9b228b/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border bg-white/70 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-white hover:text-amber-600"
+                className="inline-flex items-center gap-2 rounded-lg border bg-white/70 px-3 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-white hover:text-amber-600 md:px-4 md:py-2"
                 aria-label="LinkedIn Profile"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -66,7 +66,7 @@ export default function Hero() {
                 href="https://github.com/ajay2246"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border bg-white/70 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-white hover:text-amber-600"
+                className="inline-flex items-center gap-2 rounded-lg border bg-white/70 px-3 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-white hover:text-amber-600 md:px-4 md:py-2"
                 aria-label="GitHub Profile"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

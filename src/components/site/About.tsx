@@ -1,6 +1,6 @@
 export default function About() {
-    return (
-      <section id="about" className="mx-auto max-w-6xl px-4 py-16">
+      return (
+        <section id="about" className="mx-auto max-w-6xl px-4 py-8 md:py-16">
         <div className="hf-gborder">
           <div className="hf-card rounded-3xl border bg-white/72 p-8 shadow-sm md:p-10">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">About</h2>

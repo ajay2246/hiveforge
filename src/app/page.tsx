@@ -9,6 +9,7 @@ import Process from "@/components/site/Process";
 import About from "@/components/site/About";
 import CTA from "@/components/site/CTA";
 import Footer from "@/components/site/Footer";
+import BackToTop from "@/components/site/BackToTop";
 import Reveal from "@/components/site/Reveal";
 
 export default function Home() {
@@ -19,16 +20,25 @@ export default function Home() {
       <Navbar />
       <main className="relative">
         <Reveal><Hero /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={80}><TrustBar /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={120}><WhatIBuild /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={140}><CloudDevOps /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={160}><AppliedAI /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={180}><FeaturedExperience /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={200}><Process /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={220}><About /></Reveal>
+        <div className="hf-section-divider" />
         <Reveal delayMs={240}><CTA /></Reveal>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
