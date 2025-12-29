@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "cloud architecture",
     "web development",
     "backend engineering",
-    "Java Spring Boot",
+    "Spring Boot",
     "React",
     "Next.js",
     "Kafka",
