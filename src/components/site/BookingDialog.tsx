@@ -56,10 +56,27 @@ export default function BookingDialog({
     setError(null);
     setSuccess(null);
 
-    // Basic validation
+    // Enhanced validation
     if (!form.name.trim()) return doneError("Please enter your name.");
+    if (form.name.trim().length < 2) return doneError("Name must be at least 2 characters.");
     if (!form.email.trim()) return doneError("Please enter your email.");
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email.trim())) {
+      return doneError("Please enter a valid email address.");
+    }
+    
     if (!form.preferredDate) return doneError("Please select a preferred date.");
+    
+    // Date validation
+    const selectedDate = new Date(form.preferredDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (selectedDate < today) {
+      return doneError("Please select a date in the future.");
+    }
+    
     if (!form.preferredTime) return doneError("Please select a preferred time.");
 
     try {
@@ -76,11 +93,26 @@ export default function BookingDialog({
       }
 
       setSuccess(
-        `Request received! I’ll reach out to ${form.email} to confirm the appointment time.`
+        `Request received! I'll reach out to ${form.email} to confirm the appointment time.`
       );
 
-      // Optional: close after a moment
-      // setTimeout(() => setOpen(false), 1200);
+      // Reset form after successful submission
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        topic: "Website",
+        preferredDate: "",
+        preferredTime: "10:00",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/New_York",
+        message: "",
+      });
+
+      // Close dialog after 2 seconds
+      setTimeout(() => {
+        setOpen(false);
+      }, 2000);
 
     } catch {
       return doneError("Network error. Please try again.");
@@ -180,6 +212,8 @@ export default function BookingDialog({
               <Input
                 id="date"
                 type="date"
+                min={new Date().toISOString().split("T")[0]}
+                max={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                 value={form.preferredDate}
                 onChange={(e) => update("preferredDate", e.target.value)}
               />

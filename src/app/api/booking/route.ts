@@ -1,10 +1,60 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import {
+  isValidEmail,
+  isValidBookingDate,
+  generateBookingEmailHtml,
+  generateBookingEmailText,
+} from "@/lib/email-utils";
 
 export const runtime = "nodejs";
 
+// Rate limiting: simple in-memory store (use Redis in production)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX_REQUESTS = 5; // 5 requests per window
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
+
+function getClientIP(req: Request): string {
+  // Try to get IP from headers (works with Vercel, Cloudflare, etc.)
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0].trim();
+  }
+  const realIP = req.headers.get("x-real-ip");
+  if (realIP) {
+    return realIP;
+  }
+  return "unknown";
+}
+
 export async function POST(req: Request) {
   try {
+    // Rate limiting
+    const clientIP = getClientIP(req);
+    if (!checkRateLimit(clientIP)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       console.error("Missing RESEND_API_KEY");
@@ -29,6 +79,7 @@ export async function POST(req: Request) {
       message,
     } = body ?? {};
 
+    // Validation
     if (!name || !email || !preferredDate || !preferredTime) {
       return NextResponse.json(
         { error: "Missing required fields." },
@@ -36,47 +87,61 @@ export async function POST(req: Request) {
       );
     }
 
-    const html = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6">
-        <h2>New Call Booking Request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
-        ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}
-        <hr />
-        <p><strong>Topic:</strong> ${topic || "N/A"}</p>
-        <p><strong>Preferred Date:</strong> ${preferredDate}</p>
-        <p><strong>Preferred Time:</strong> ${preferredTime}</p>
-        <p><strong>Timezone:</strong> ${timezone || "N/A"}</p>
-        ${
-          message
-            ? `<hr /><p><strong>Message:</strong><br/>${String(message).replace(
-                /\n/g,
-                "<br/>"
-              )}</p>`
-            : ""
-        }
-        <hr />
-        <p>Sent from <strong>HiveForge.dev</strong></p>
-      </div>
-    `;
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format." },
+        { status: 400 }
+      );
+    }
+
+    // Validate date
+    const dateValidation = isValidBookingDate(preferredDate);
+    if (!dateValidation.valid) {
+      return NextResponse.json(
+        { error: dateValidation.error || "Invalid date." },
+        { status: 400 }
+      );
+    }
+
+    // Validate name length
+    if (name.trim().length < 2 || name.trim().length > 100) {
+      return NextResponse.json(
+        { error: "Name must be between 2 and 100 characters." },
+        { status: 400 }
+      );
+    }
+
+    // Validate message length if provided
+    if (message && message.length > 2000) {
+      return NextResponse.json(
+        { error: "Message must be less than 2000 characters." },
+        { status: 400 }
+      );
+    }
+
+    const recipientEmail = process.env.BOOKING_RECIPIENT_EMAIL || "ajaykancheti99@gmail.com";
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "HiveForge <onboarding@resend.dev>";
+
+    const emailData = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone?.trim(),
+      company: company?.trim(),
+      topic: topic || "Website",
+      preferredDate,
+      preferredTime,
+      timezone: timezone || "America/New_York",
+      message: message?.trim(),
+    };
 
     const { data, error } = await resend.emails.send({
-      from: "HiveForge <onboarding@resend.dev>",
-      to: ["ajaykancheti99@gmail.com"],
-      subject: `📅 New Booking Request from ${name}`,
-      replyTo: email,
-      html,
-      text: `New booking request:
-Name: ${name}
-Email: ${email}
-Phone: ${phone || ""}
-Company: ${company || ""}
-Topic: ${topic || ""}
-Date: ${preferredDate}
-Time: ${preferredTime}
-Timezone: ${timezone || ""}
-Message: ${message || ""}`,
+      from: fromEmail,
+      to: [recipientEmail],
+      subject: `📅 New Booking Request from ${emailData.name}`,
+      replyTo: emailData.email,
+      html: generateBookingEmailHtml(emailData),
+      text: generateBookingEmailText(emailData),
     });
 
     if (error) {
