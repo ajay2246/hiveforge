@@ -34,7 +34,7 @@ const items = [
 
 export default function FeaturedExperience() {
   return (
-    <section id="work" className="mx-auto max-w-6xl px-4 py-20">
+    <section id="work" className="mx-auto max-w-6xl px-4 py-8 md:py-20">
       <p className="text-sm font-medium text-amber-700">Proof</p>
       <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
         Featured experience

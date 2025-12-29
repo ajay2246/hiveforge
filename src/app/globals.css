@@ -240,13 +240,30 @@
     0 26px 70px rgba(245,158,11,0.16);
 }
 
-/* Section rhythm */
+/* Section rhythm - Optimized for mobile */
 .hf-section {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 @media (min-width: 768px) {
   .hf-section { padding-top: 6rem; padding-bottom: 6rem; }
+}
+
+/* Section divider */
+.hf-section-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(245, 158, 11, 0.2),
+    transparent
+  );
+  margin: 2rem 0;
+}
+@media (min-width: 768px) {
+  .hf-section-divider {
+    margin: 3rem 0;
+  }
 }
 
 /* Section header pattern */

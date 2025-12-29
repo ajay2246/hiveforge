@@ -11,7 +11,7 @@ const items = [
 
 export default function CloudDevOps() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20">
+    <section className="mx-auto max-w-6xl px-4 py-8 md:py-20">
       <p className="text-sm font-medium text-amber-700">Cloud & DevOps</p>
       <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
         Production-ready delivery
