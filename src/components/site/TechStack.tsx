@@ -1,6 +1,6 @@
 const groups = [
     { title: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind"] },
-    { title: "Backend", items: ["Node.js", "Java (Spring Boot)", "REST APIs", "Microservices"] },
+    { title: "Backend", items: ["Node.js", "Spring Boot", "REST APIs", "Microservices"] },
     { title: "AI / Data", items: ["Python", "ML models", "Image processing"] },
     { title: "Cloud & DevOps", items: ["AWS", "Docker", "CI/CD"] },
   ];

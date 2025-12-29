@@ -10,7 +10,7 @@ const frontend = [
 ];
 
 const backend = [
-  "Java Spring Boot microservices",
+  "Spring Boot microservices",
   "REST & GraphQL APIs",
   "Kafka / RabbitMQ / JMS",
   "Security (JWT, OAuth2)",
